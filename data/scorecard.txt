@@ -1,0 +1,6 @@
+Home1, 11,1,	Away1,	1,0
+Home1, 11,2,	Away1,	2,0
+Home1, 11,3,	Away1,	3,0
+Home2, 11,1,	Away2,	1,0
+Home2, 11,2,	Away2,	2,0
+Home2, 11,3,	Away2,	3,0

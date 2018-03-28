@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+<link rel="stylesheet" href="mystyles.css"> 
+
+
+ 
+
+
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#" onclick="points('b')">Refresh</a>
+  <a href="scorecard.txt">Show Scorecard</a>
+  <a href="scorecard.txt" Download >Download Scorecard</a>
+    <a href="#" onclick="savescore()">Save to scorecard</a> 
+	<a href="/matchcard.html">Manage Report</a>
+    <button class="dropdown-btn">Who Serves 
+    <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-container">
+    <a href="#" onclick="chooseserver(1)">Left</a>
+    <a href="#" onclick="chooseserver(0)">Right</a>
+  </div>
+  <a href="#" onclick="points('r')">Change Ends</a>
+  <a href="#" onclick="points(8)">Clear points</a>
+  <a href="#" onclick="points(9)">Clear Points and Games</a>
+  <a hreg="#" onclick="clearmatch('a')">Clear match and delete scorecard</a>
+  <a href="help.html">Help</a>
+</div>
+
+<span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Menu       &nbsp;&nbsp;&nbsp; Scoreboard-001</span>
+
+
+
+<div class="container">
+    
+    <div class="left"><span id="leftplayer" class="auto-style2">Home1</span>
+    &nbsp;
+    
+    <button onclick="points(0)" style="width: 90px; height: 50px;">UP</button>
+    &nbsp;&nbsp;
+    <span id="leftpoints" class="auto-style2">0</span>
+    &nbsp;&nbsp;
+    <button onclick="points(1)" style="width: 90px; height: 50px;">DN</button>
+    <br><br>
+    Games&nbsp;&nbsp;
+    <button onclick="points(2)"  style="width: 90px; height: 50px;">UP</button>
+    &nbsp;&nbsp;
+    <span id="gamep1" class="auto-style2">0</span>
+    &nbsp;&nbsp;
+    <button onclick="points(3)" style="width: 90px; height: 50px;">DN</button>
+    <br><br>
+      <form name="player1">
+        Left Player&nbsp;
+        <select name="choosel" onchange="chooseleft()">
+            <option style="display:none" selected="selected" value=""> </option>
+            <option value="A">Home1</option>
+            <option value="B">Home2</option>
+            <option value="C">Home3</option>
+            <option value="D">Away1</option>
+            <option value="E">Away2</option>
+            <option value="F">Away3</option>
+        </select>
+    </form>
+	
+	<p id="leftserver">Service Won</p>
+	&nbsp;<br>
+
+    </div>
+   
+     <br>
+    <div class="right"><span id="rightplayer" class="auto-style2">Away1</span>
+ &nbsp;
+    <button onclick="points(4)" class="auto-style2" style="width: 90px; height: 50px;">UP</button>
+    &nbsp;&nbsp;
+    <span id="rightpoints" class="auto-style2">0</span>
+    &nbsp;&nbsp;
+    <button onclick="points(5)" class="auto-style2" style="width: 90px; height: 50px;">DN</button> 
+    <br><br>
+   Games&nbsp;&nbsp;
+   <button onclick="points(6)" class="auto-style2" style="width: 90px; height: 50px;">UP</button>
+   &nbsp;&nbsp;
+   <span id="gamep2" class="auto-style2">0</span>
+   &nbsp;&nbsp;
+   <button onclick="points(7)"  style="width: 90px; height: 50px;">DN</button>
+   <br><br>
+    <form name="player2">
+        Right Player&nbsp;&nbsp;&nbsp;&nbsp;
+        <select name="chooser" onchange="chooseright()">
+            <option style="display:none" selected="selected" value=""> </option>
+            <option value="A">Away1</option>
+            <option value="B">Away2</option>
+            <option value="C">Away3</option>
+            <option value="D">Home1</option>
+            <option value="E">Home2</option>
+            <option value="F">Home3</option>
+        </select>
+    </form>
+	
+	<p id="rightserver">Service Won</p>
+	&nbsp;<br>
+
+   
+
+ 
+    </div>
+</div>
+
+
+
+
+<script>
+
+
+
+function restoreplayers(){
+//  var selection = player1.choosel;
+//  var strUser = (selection[selection.selectedIndex].text)
+//  (player1.choosel[player1.choosel].value)=sessionStorage.getItem("lplayer");
+
+//(player1.choosel[player1.choosel.selectedIndex].value) = "E";
+//sessionStorage.getItem("lplayer");
+//var a = 0;
+ //   if (sessionStorage) {
+  //      a = sessionStorage.getItem("servewin");
+   //     chooseserver(a);
+//}
+points('b');
+}
+
+
+function matchdate(){
+ var d = new Date();
+ document.getElementById("demo").innerHTML = d.toDateString();
+
+
+}
+
+function points(who){
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+         var txt = xhttp.responseText;
+         var txtArr = txt.split(",");
+         document.getElementById("leftpoints").innerHTML =txtArr[0];
+         document.getElementById("rightpoints").innerHTML =txtArr[1];
+         document.getElementById("gamep1").innerHTML =txtArr[2];
+         document.getElementById("gamep2").innerHTML =txtArr[3];
+         document.getElementById("leftplayer").innerHTML =txtArr[4];
+         document.getElementById("rightplayer").innerHTML =txtArr[5];
+         closeNav();
+       }
+   };
+   xhttp.open("GET", "points?request="+who, true);
+   xhttp.send();
+  
+}
+
+function clearmatch(a){
+   var d = new Date();
+   var score = d.toDateString();
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+         var txt = xhttp.responseText;
+         var txtArr = txt.split(",");
+         document.getElementById("leftpoints").innerHTML =txtArr[0];
+         document.getElementById("rightpoints").innerHTML =txtArr[1];
+         document.getElementById("gamep1").innerHTML =txtArr[2];
+         document.getElementById("gamep2").innerHTML =txtArr[3];
+         closeNav();
+       }
+   };
+   xhttp.open("GET", "points?request="+a, true);
+   xhttp.send();
+  
+}
+
+
+
+function savescore(){
+   var d = new Date();
+   var score = d.toDateString();
+ //  var score=document.getElementById("leftplayer").innerHTML;
+ //  score=score+","+document.getElementById("rightplayer").innerHTML
+   var xhttp = new XMLHttpRequest();
+   xhttp.onreadystatechange = function() {
+   if (this.readyState == 4 && this.status == 200) {
+       closeNav();
+    
+    }
+  }
+  xhttp.open("GET", "savescore?score="+score, true);
+  xhttp.send();  
+
+}
+  
+  
+function processcard(){
+   var d = new Date();
+   var score = d.toDateString();
+   var xhttp = new XMLHttpRequest();
+     xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        closeNav();
+       }
+   };
+   xhttp.open("GET", "report?request="+score, true);
+   xhttp.send();
+
+}
+
+function chooseleft() {
+    var selection = player1.choosel;
+    var strUser = (selection[selection.selectedIndex].text);
+    document.getElementById("leftplayer").innerHTML=strUser;
+   // sessionStorage.setItem("lplayer", selection[selection.selectedIndex].value);
+    var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            
+           closeNav();
+          }
+       }
+    xhttp.open("GET", "chooseplayer?left="+strUser, true);
+    xhttp.send();  
+}
+
+function chooseright() {
+    var selection = player2.chooser;
+    var strUser = (selection[selection.selectedIndex].text);
+ 	document.getElementById("rightplayer").innerHTML=strUser;
+  // 	sessionStorage.setItem("rplayer", selection[selection.selectedIndex].value);
+    var xhttp = new XMLHttpRequest();
+       xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            
+           closeNav();
+          }
+     }
+    xhttp.open("GET", "chooseplayer?right="+strUser, true);
+    xhttp.send();   	
+}
+
+
+
+function openNav() {
+    document.getElementById("mySidenav").style.display = "block";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.display = "none";
+}
+
+
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}
+
+var a = 0;
+    if (sessionStorage) {
+        a = sessionStorage.getItem("servewin");
+        chooseserver(a);
+}
+points('b')
+
+
+function chooseserver(a){
+
+if (a==1){
+	document.getElementById("leftserver").style.display="block";
+	document.getElementById("leftserver").style.backgroundColor="red";
+	document.getElementById("rightserver").style.display="none";
+	} else {
+	document.getElementById("leftserver").style.display="none";
+	document.getElementById("rightserver").style.display="block";
+	document.getElementById("rightserver").style.backgroundColor="red";
+	
+}
+
+ if (sessionStorage)
+        sessionStorage.setItem("servewin", a.toString());
+
+
+closeNav();
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</head>
+</html>
